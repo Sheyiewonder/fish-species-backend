@@ -23,9 +23,8 @@ def predict(image_array):
 
     index = int(np.argmax(predictions))
 
-    confidence = float(predictions[0][index]) * 100
+    species = CLASS_NAMES[index]
 
-    return {
-        "species": CLASS_NAMES[index],
-        "accuracy": round(confidence, 2),
-    }
+    accuracy = float(predictions[0][index] * 100)
+
+    return species, accuracy

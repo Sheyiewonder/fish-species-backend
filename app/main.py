@@ -6,6 +6,7 @@ from PIL import Image
 
 from .predictor import predict
 from .preprocess import preprocess_image
+from .species_info import SPECIES_INFO
 
 app = FastAPI(title="Fish Species Identifier API")
 
@@ -42,6 +43,29 @@ async def predict_species(file: UploadFile = File(...)):
 
     processed = preprocess_image(image)
 
-    result = predict(processed)
+    species, accuracy = predict(processed)
 
-    return result
+    info = SPECIES_INFO.get(species)
+
+    if info is None:
+        return {
+            "species": species,
+            "accuracy": accuracy,
+            "scientific_name": "",
+            "description": "No information available for this species.",
+            "features": [],
+            "habitat": "",
+            "diet": "",
+            "average_length": "",
+        }
+
+    return {    
+        "species": species,
+        "scientific_name": info["scientific_name"],
+        "accuracy": accuracy,
+        "features": info["features"],
+        "habitat": info["habitat"],
+        "diet": info["diet"],
+        "average_length": info["average_length"],
+        "description": info["description"],
+    }
