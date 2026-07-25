@@ -2,6 +2,7 @@ from io import BytesIO
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Response
 from PIL import Image
 
 from .predictor import predict
@@ -22,13 +23,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def home():
     return {
         "message": "Fish Species Identifier API is running."
     }
 
+@app.api_route("/health", methods=["GET", "HEAD"])
+def health():
+    return {
+        "status": "ok"
+    }
 
 @app.post("/predict")
 async def predict_species(file: UploadFile = File(...)):
