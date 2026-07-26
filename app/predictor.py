@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 
 from .labels import CLASS_NAMES
 
-MODEL_PATH = Path("app/model/fish_species_classifier.keras")
+MODEL_PATH = Path("app/model/best_fish_classifier.keras")
 
 print("Loading model...")
 
